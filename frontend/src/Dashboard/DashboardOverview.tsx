@@ -46,11 +46,11 @@ export default function DashboardOverview({
           {""}
           {String(currentClass.name)}
           {".GVCN:"}
-          {String((currentClass.homeroomTeacher as |DataRecord|undefined)?.name??"chua phan cong")}
+          {String((currentClass.homeroomTeacher as |DataRecord|undefined)?.name??"Chưa phân công")}
           </>):(
             <>
             <strong>quyen hien tai:</strong>
-            {" "}{ permission.includes("*")?"toan quyen he thong":permission.length>0?permission.join(","):"chua co quyen"}
+            {" "}{ permission.includes("*")?"Toàn quyền hệ thống":permission.length>0?permission.join(","):"Chưa có quyền"}
             </>
           )
         }

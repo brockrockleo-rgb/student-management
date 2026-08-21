@@ -86,7 +86,7 @@ export class TeacherExcelService {
     ]);
 
     if (!rawRows.length) {
-      throw new BadRequestException("File Excel ko co du lieu");
+      throw new BadRequestException("File Excel không có dữ liệu");
     }
 
     const rows: ImportTeacherRow[] = rawRows.map(({ row, values }) => ({

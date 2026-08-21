@@ -11,7 +11,7 @@ export const FIXED_PERMISSION_DEFINITIONS=[
         name:"sua sinh vien",
     },{
         code:"students.delete",
-        name:"xoas sinh vien",
+        name:"xoa sinh vien",
     },
     {
         code:"teachers.view",

@@ -71,11 +71,11 @@ export class AcademicAccessService {
       );
     }
     if (departmentId && schoolClass.department.id !== departmentId){
-      throw new BadRequestException("lop da chonj k thuoc khoa");
+      throw new BadRequestException("Lớp đã chọn không thuốc khoa");
     }
     if (!schoolClass.homeroomTeacher || schoolClass.homeroomTeacher.deleted) {
       throw new BadRequestException(
-        "Lớp chưa có giáo viên chủ nhiệm hoạt động",
+        "Lớp chưa có giao viên",
       );
     }
 

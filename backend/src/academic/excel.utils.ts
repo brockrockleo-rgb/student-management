@@ -111,7 +111,7 @@ export async function readExcelRows(
         !fileName.endsWith(".xlsx")
     ) {
         throw new BadRequestException(
-            "File phai co dang  .xlsx",
+            "File phai co dang .xlsx",
         );
     }
 

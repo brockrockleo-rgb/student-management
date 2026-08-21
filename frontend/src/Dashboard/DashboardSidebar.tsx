@@ -40,7 +40,6 @@ export default function DashboardSidebar({
         {!collapsed && (
           <span className="sider-title">
             Student Management
-            <span className="sider-caption">Education system</span>
           </span>
         )}
       </div>
@@ -62,7 +61,7 @@ export default function DashboardSidebar({
           className="change-password-button"
           icon={<LockOutlined/>}
           onClick={onChangePassword}
-          >{!collapsed&& "doi mat khau"}</Button>
+          >{!collapsed&& "Đổi mật khẩu "}</Button>
         </div>
 
       )}

@@ -132,7 +132,7 @@ export class StudentExcelService {
   
 
     if (!sheet) {
-      throw new BadRequestException("File Excel ko co noi dung");
+      throw new BadRequestException("File Excel không có nội dung");
     }
 
     this.validateHeaders(sheet);
