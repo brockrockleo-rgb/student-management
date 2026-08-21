@@ -214,7 +214,7 @@ async listWithClassCount():Promise<DepartmentListWithClassCountItem[]> {
   }
 
  async importExcel(file: UploadedExcelFile) {
-    const rows = await readExcelRows(file, "Nhập khoa", [
+    const rows = await readExcelRows(file, [
       "Mã khoa",
       "Tên khoa",
     ]);

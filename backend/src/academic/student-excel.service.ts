@@ -40,7 +40,7 @@ export class StudentExcelService {
 
     const workbook = new Workbook();
 
-    const sheet = workbook.addWorksheet("Sinh viên", {
+    const sheet = workbook.addWorksheet("Students", {
       views: [{ state: "frozen", ySplit: 1 }],
     });
 
@@ -82,7 +82,7 @@ export class StudentExcelService {
     workbook.creator = "Student Management";
     workbook.created = new Date();
 
-    const sheet = workbook.addWorksheet("Nhập sinh viên", {
+    const sheet = workbook.addWorksheet("Students", {
       views: [{ state: "frozen", ySplit: 1 }],
     });
 
@@ -128,11 +128,11 @@ export class StudentExcelService {
   ): Promise<ImportExcelResult> {
     const workbook = await this.loadWorkbook(file);
 
-    const sheet =
-      workbook.getWorksheet("Nhập sinh viên") ?? workbook.worksheets[0];
+    const sheet =workbook.worksheets[0];
+  
 
     if (!sheet) {
-      throw new BadRequestException("File Excel không có worksheet");
+      throw new BadRequestException("File Excel ko co noi dung");
     }
 
     this.validateHeaders(sheet);

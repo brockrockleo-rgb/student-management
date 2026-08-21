@@ -1,14 +1,6 @@
-import {
-  BadRequestException,
-  Injectable,
-} from "@nestjs/common";
-import {
-  InjectRepository,
-} from "@mikro-orm/nestjs";
-import {
-  EntityManager,
-  EntityRepository,
-} from "@mikro-orm/mongodb";
+import { BadRequestException, Injectable } from "@nestjs/common";
+import { InjectRepository } from "@mikro-orm/nestjs";
+import { EntityManager, EntityRepository } from "@mikro-orm/mongodb";
 import { Department } from "../entities";
 import type {
   ImportDepartmentRow,
@@ -26,67 +18,36 @@ import {
 export class DepartmentExcelService {
   constructor(
     private readonly em: EntityManager,
-
     @InjectRepository(Department)
-    private readonly departments:
-      EntityRepository<Department>,
+    private readonly departments: EntityRepository<Department>,
   ) {}
 
   async exportExcel() {
-    const departments =
-      await this.departments.find(
-        {
-          deleted: false,
-        },
-        {
-          orderBy: {
-            createdAt: "ASC",
-          },
-        },
-      );
+    const departments = await this.departments.find(
+      { deleted: false },
+      { orderBy: { createdAt: "ASC" } },
+    );
 
     return createExcelBuffer({
-      name: "Danh sách khoa",
-
+      name: "departments",
       columns: [
-        {
-          header: "Mã khoa",
-          key: "code",
-          width: 18,
-        },
-        {
-          header: "Tên khoa",
-          key: "name",
-          width: 35,
-        },
+        { header: "Mã khoa", key: "code", width: 18 },
+        { header: "Tên khoa", key: "name", width: 35 },
       ],
-
-      rows: departments.map(
-        (department) => ({
-          code: department.code,
-          name: department.name,
-        }),
-      ),
+      rows: departments.map((department) => ({
+        code: department.code,
+        name: department.name,
+      })),
     });
   }
 
   createTemplate() {
     return createExcelBuffer({
-      name: "Nhập khoa",
-
+      name: "departments",
       columns: [
-        {
-          header: "Mã khoa",
-          key: "code",
-          width: 18,
-        },
-        {
-          header: "Tên khoa",
-          key: "name",
-          width: 35,
-        },
+        { header: "Mã khoa", key: "code", width: 18 },
+        { header: "Tên khoa", key: "name", width: 35 },
       ],
-
       rows: [],
     });
   }
@@ -94,86 +55,49 @@ export class DepartmentExcelService {
   async importExcel(
     file: UploadedExcelFile,
   ): Promise<ImportExcelResult> {
-    const rawRows =
-      await readExcelRows(
-        file,
-        "Nhập khoa",
-        [
-          "Mã khoa",
-          "Tên khoa",
-        ],
-      );
+    const rawRows = await readExcelRows(
+      file,
+      ["Mã khoa", "Tên khoa"],
+    );
 
     if (!rawRows.length) {
-      throw new BadRequestException(
-        "File Excel không có dữ liệu khoa",
-      );
+      throw new BadRequestException("File Excel khong co du lieu");
     }
 
-    const rows:
-      ImportDepartmentRow[] =
-      rawRows.map(
-        ({ row, values }) => ({
-          row,
-          code:
-            normalizeCode(values[0]),
-          name: values[1].trim(),
-        }),
-      );
+    const rows: ImportDepartmentRow[] = rawRows.map(
+      ({ row, values }) => ({
+        row,
+        code: normalizeCode(values[0]),
+        name: values[1].trim(),
+      }),
+    );
 
-    const existing =
-      await this.departments.find({});
+    const existing = await this.departments.find({});
+    const existingCodes = new Set(
+      existing.map((department) => normalizeCode(department.code)),
+    );
 
-    const existingCodes =
-      new Set(
-        existing.map((department) =>
-          normalizeCode(
-            department.code,
-          ),
-        ),
-      );
-
-    const fileCodes =
-      new Set<string>();
-
-    const errors:
-      ImportExcelError[] = [];
-
-    const importedCodes:
-      string[] = [];
+    const fileCodes = new Set<string>();
+    const errors: ImportExcelError[] = [];
+    const importedCodes: string[] = [];
 
     for (const row of rows) {
-      const rowErrors:
-        string[] = [];
+      const rowErrors: string[] = [];
 
       if (!row.code) {
-        rowErrors.push(
-          "thiếu mã khoa",
-        );
+        rowErrors.push("thiếu mã khoa");
       }
 
       if (!row.name) {
-        rowErrors.push(
-          "thiếu tên khoa",
-        );
+        rowErrors.push("thiếu tên khoa");
       }
 
-      if (
-        row.code &&
-        existingCodes.has(row.code)
-      ) {
-        rowErrors.push(
-          "mã khoa đã tồn tại",
-        );
+      if (row.code && existingCodes.has(row.code)) {
+        rowErrors.push("mã khoa đã tồn tại");
       }
 
-      if (
-        row.code &&
-        fileCodes.has(row.code)
-      ) {
-        rowErrors.push(
-          "mã khoa bị lặp trong file",
-        );
+      if (row.code && fileCodes.has(row.code)) {
+        rowErrors.push("mã khoa bị lặp trong file");
       }
 
       if (row.code) {
@@ -183,24 +107,18 @@ export class DepartmentExcelService {
       if (rowErrors.length) {
         errors.push({
           row: row.row,
-          message:
-            rowErrors.join("; "),
+          message: rowErrors.join("; "),
         });
-
         continue;
       }
 
-      const entity =
-        this.departments.create({
-          code: row.code,
-          name: row.name,
-        });
+      const entity = this.departments.create({
+        code: row.code,
+        name: row.name,
+      });
 
       this.em.persist(entity);
-
-      importedCodes.push(
-        row.code,
-      );
+      importedCodes.push(row.code);
     }
 
     if (importedCodes.length) {
@@ -208,8 +126,7 @@ export class DepartmentExcelService {
     }
 
     return {
-      imported:
-        importedCodes.length,
+      imported: importedCodes.length,
       skipped: errors.length,
       importedCodes,
       errors,

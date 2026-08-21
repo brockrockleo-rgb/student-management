@@ -29,7 +29,7 @@ export class ClassExcelService {
     const classes = await this.classesService.list(jwt);
 
     return createExcelBuffer({
-      name: "Danh sách lớp",
+      name: "Classes",
       columns: [
         { header: "Mã lớp", key: "code", width: 18 },
         { header: "Tên lớp", key: "name", width: 30 },
@@ -101,7 +101,7 @@ export class ClassExcelService {
   }
 
   async importExcel(file: UploadedExcelFile): Promise<ImportExcelResult> {
-    const rawRows = await readExcelRows(file, "Nhập lớp", [
+    const rawRows = await readExcelRows(file,  [
       "Mã lớp",
       "Tên lớp",
       "Mã khoa",
@@ -109,7 +109,7 @@ export class ClassExcelService {
     ]);
 
     if (!rawRows.length) {
-      throw new BadRequestException("File Excel không có dữ liệu lớp");
+      throw new BadRequestException("File Excel ko co du lieu");
     }
 
     const rows: ImportClassRow[] = rawRows.map(({ row, values }) => ({

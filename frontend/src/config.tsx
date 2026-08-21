@@ -21,6 +21,10 @@ export const resourceConfigs: Record<ResourceKey, ResourceConfig> = {
     label: "Danh sách sinh viên", menuLabel: "Sinh viên", singular: "sinh viên",
     description: "Quản lý sinh viên theo lớp và giáo viên chủ nhiệm",
     icon: <IdcardOutlined />, endpoint: "/students",
+    excel:{
+      exportFile:"students.xlsx",
+      templateFile:"student-import-template.xlsx",
+    },
     fields: [
       { key: "studentCode", label: "Mã sinh viên", required: true },
       { key: "name", label: "Họ và tên", required: true },
@@ -43,6 +47,10 @@ export const resourceConfigs: Record<ResourceKey, ResourceConfig> = {
     label: "Danh sách giáo viên", menuLabel: "Giáo viên", singular: "giáo viên",
     description: "Quản lý hồ sơ và đơn vị công tác của giáo viên",
     icon: <TeamOutlined />, endpoint: "/teachers",
+    excel:{
+      exportFile:"teachers.xlsx",
+      templateFile:"teacher-import-template.xlsx",
+    },
     fields: [
       { key: "teacherCode", label: "Mã giáo viên", required: true },
       { key: "name", label: "Họ và tên", required: true },
@@ -58,6 +66,10 @@ export const resourceConfigs: Record<ResourceKey, ResourceConfig> = {
     label: "Danh sách khoa", menuLabel: "Khoa", singular: "khoa",
     description: "Quản lý các khoa và đơn vị đào tạo",
     icon: <ApartmentOutlined />, endpoint: "/departments",
+    excel:{
+      exportFile:"departments.xlsx",
+      templateFile:"department-import-template.xlsx",
+    },
     fields: [
       { key: "code", label: "Mã khoa", required: true },
       { key: "name", label: "Tên khoa", required: true },
@@ -72,6 +84,10 @@ export const resourceConfigs: Record<ResourceKey, ResourceConfig> = {
     label: "Danh sách lớp", menuLabel: "Lớp", singular: "lớp",
     description: "Quản lý lớp, khoa và giáo viên chủ nhiệm",
     icon: <TeamOutlined />, endpoint: "/classes",
+    excel:{
+      exportFile:"classes.xlsx",
+      templateFile:"class-import-template.xlsx",
+    },
     fields: [
       { key: "code", label: "Mã lớp", required: true },
       { key: "name", label: "Tên lớp", required: true },

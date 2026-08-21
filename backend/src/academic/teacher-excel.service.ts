@@ -54,7 +54,7 @@ export class TeacherExcelService {
 
     return createExcelBuffer(
       {
-        name: "Nhập giáo viên",
+        name: "Teachers",
         columns: [
           { header: "Mã giáo viên", key: "teacherCode", width: 18 },
           { header: "Họ và tên", key: "name", width: 30 },
@@ -79,14 +79,14 @@ export class TeacherExcelService {
   }
 
   async importExcel(file: UploadedExcelFile): Promise<ImportExcelResult> {
-    const rawRows = await readExcelRows(file, "Nhập giáo viên", [
+    const rawRows = await readExcelRows(file, [
       "Mã giáo viên",
       "Họ và tên",
       "Mã khoa",
     ]);
 
     if (!rawRows.length) {
-      throw new BadRequestException("File Excel không có dữ liệu giáo viên");
+      throw new BadRequestException("File Excel ko co du lieu");
     }
 
     const rows: ImportTeacherRow[] = rawRows.map(({ row, values }) => ({

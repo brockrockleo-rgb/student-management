@@ -100,7 +100,6 @@ export async function createExcelBuffer(
 
 export async function readExcelRows(
     file: UploadedExcelFile,
-    sheetName: string,
     expectedHeaders: string[],
 ): Promise<ReadExcelRow[]> {
     const fileName = file?.originalname?.trim().toLowerCase() ?? "";
@@ -138,11 +137,11 @@ export async function readExcelRows(
   );
 }
 
-    const sheet = workbook.getWorksheet(sheetName);
-
+    const sheet = workbook.worksheets[0];
+   
     if (!sheet) {
         throw new BadRequestException(
-            `Không tìm thấy sheet "${sheetName}"`,
+            `File excel ko co noi dung`,
         );
     }
 
